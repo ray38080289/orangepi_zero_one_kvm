@@ -40,14 +40,14 @@ image：
 zcat boot-orange_pi_zero.bin.gz debian-bookworm-armhf-wi3soo.bin.gz > sd-card.img
 ```
 
-![合併映像檔](image-1.png)
+![合併映像檔](src/pic/image-1.png)
 
 ---
 
 ### 2. 使用 balenaEtcher 燒錄
 選取 `sd-card.img` 進行燒錄。
 
-![balenaEtcher 操作](image-2.png)
+![balenaEtcher 操作](src/pic/image-2.png)
 
 ---
 
@@ -60,15 +60,15 @@ zcat boot-orange_pi_zero.bin.gz debian-bookworm-armhf-wi3soo.bin.gz > sd-card.im
 
 > 若出現憑證錯誤，需刪除舊的 key（詳情可問 GPT）
 
-![SSH 連線](image-3.png)
+![SSH 連線](src/pic/image-3.png)
 
 正常會出現接受新 key 提示：
 
-![接受新 key](image-4.png)
+![接受新 key](src/pic/image-4.png)
 
 本教學全程以 root 操作，所有命令不須加 sudo。
 
-![root 操作](image-5.png)
+![root 操作](src/pic/image-5.png)
 
 ---
 
@@ -78,7 +78,7 @@ zcat boot-orange_pi_zero.bin.gz debian-bookworm-armhf-wi3soo.bin.gz > sd-card.im
 passwd
 ```
 
-![更改密碼](image-6.png)
+![更改密碼](src/pic/image-6.png)
 
 ---
 
@@ -88,7 +88,7 @@ passwd
 apt update
 ```
 
-![更新軟體源](image-7.png)
+![更新軟體源](src/pic/image-7.png)
 
 ---
 
@@ -102,11 +102,11 @@ apt update
 apt install cloud-guest-utils -y
 ```
 
-![安裝 cloud-guest-utils](image-9.png)
+![安裝 cloud-guest-utils](src/pic/image-9.png)
 
 查看 root 對應的 device（如 `/dev/mmcblk0`）與 part（如 2）：
 
-![查看分區](image-8.png)
+![查看分區](src/pic/image-8.png)
 
 執行：
 
@@ -121,7 +121,7 @@ resize2fs /dev/mmcblk0p2
 
 預設情況：
 
-![zram 預設](image-16.png)
+![zram 預設](src/pic/image-16.png)
 
 安裝 zram-tools：
 
@@ -129,7 +129,7 @@ resize2fs /dev/mmcblk0p2
 apt install zram-tools
 ```
 
-![安裝 zram-tools](image-14.png)
+![安裝 zram-tools](src/pic/image-14.png)
 
 裝完預設會是 lz4 256MB，但 CPU 太弱不適合全壓，因此建議改成 50%。
 
@@ -139,7 +139,7 @@ apt install zram-tools
 nano /etc/default/zramswap
 ```
 
-![編輯 zramswap](image-15.png)
+![編輯 zramswap](src/pic/image-15.png)
 
 改完後重啟服務：
 
@@ -147,7 +147,7 @@ nano /etc/default/zramswap
 systemctl restart zramswap
 ```
 
-![重啟 zramswap](image-17.png)
+![重啟 zramswap](src/pic/image-17.png)
 
 ---
 
@@ -159,7 +159,7 @@ systemctl restart zramswap
 fallocate -l 1G /swapfile && chmod 600 /swapfile &&  mkswap /swapfile && swapon /swapfile
 ```
 
-![建立 swap file](image-18.png)
+![建立 swap file](src/pic/image-18.png)
 
 開機自動啟用：
 
@@ -181,8 +181,8 @@ reboot
 apt install curl -y && curl -fsSL https://get.docker.com | bash
 ```
 
-![安裝 Docker](image-19.png)
-![Docker 安裝完成](image-20.png)
+![安裝 Docker](src/pic/image-19.png)
+![Docker 安裝完成](src/pic/image-20.png)
 
 ---
 
@@ -194,9 +194,9 @@ apt install curl -y && curl -fsSL https://get.docker.com | bash
 docker run -itd --name kvmd --privileged=true -v /lib/modules:/lib/modules:ro -v /dev:/dev -v /sys/kernel/config:/sys/kernel/config -v /root/kvmd_config:/etc/kvmd -e OTG=1 -e USERNAME=admin -e PASSWORD=admin -e VIDEONUM=0 -e AUDIONUM=0 -p 8080:8080 -p 4430:4430 -p 5900:5900 -p 623:623 silentwind0/kvmd
 ```
 
-![啟動 kvmd](image-21.png)
-![kvmd 執行中](image-26.png)
-![kvmd 執行中2](image-27.png)
+![啟動 kvmd](src/pic/image-21.png)
+![kvmd 執行中](src/pic/image-26.png)
+![kvmd 執行中2](src/pic/image-27.png)
 
 ---
 
@@ -208,7 +208,7 @@ docker logs kvmd
 
 若出現下圖，表示擷取裝置 id 錯誤或未插入：
 
-![擷取裝置錯誤](image-22.png)
+![擷取裝置錯誤](src/pic/image-22.png)
 
 將 docker 停止並刪除，並刪除設定檔（否則會導致使用相同擷取裝置）：
 
@@ -216,4 +216,4 @@ docker logs kvmd
 docker stop kvmd && docker rm kvmd && rm -rf /root/kvmd_config
 ```
 
-![刪除 kvmd 設定](image-25.png)
+![刪除 kvmd 設定](src/pic/image-25.png)
